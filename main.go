@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/eiannone/keyboard"
@@ -16,6 +17,7 @@ func main() {
 	for {
 
 		ClearScreen()
+		fmt.Print(BANNER)
 
 		if board.started {
 			if board.Evolve() {

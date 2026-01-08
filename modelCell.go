@@ -15,12 +15,14 @@ func (c *Cell) String() string {
 	}
 
 	if c.selected {
-		representation = ColorString(representation, Colors.BRIGHT_CYAN)
+		return ApplyStyle(
+			ColoredString(representation, Colors.BRIGHT_CYAN),
+			TextStyle.UNDERLINE,
+		)
 	} else {
-		representation = ColorString(representation, Colors.MAGENTA)
+		return ColoredString(representation, Colors.MAGENTA)
 	}
 
-	return representation
 }
 
 func (c *Cell) Fate(neighbours int) {

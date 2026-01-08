@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 type Cell struct {
 	status   bool
 	selected bool
@@ -13,15 +9,15 @@ func (c *Cell) String() string {
 	representation := ""
 
 	if c.status {
-		representation = ColorString(ALIVE_STRING, Colors.MAGENTA)
+		representation = ALIVE_STRING
 	} else {
-		representation = ColorString(DEAD_STRING, Colors.GREY)
+		representation = DEAD_STRING
 	}
 
 	if c.selected {
-		representation = representation + ColorString("<", Colors.RED)
+		representation = ColorString(representation, Colors.BRIGHT_CYAN)
 	} else {
-		representation = fmt.Sprintf("%s", representation)
+		representation = ColorString(representation, Colors.MAGENTA)
 	}
 
 	return representation

@@ -201,7 +201,7 @@ func (b *Board) PrintStats() {
 	deltaPopulation := b.stats.populationChange[len(b.stats.populationChange)-1]
 	fmt.Printf("\t* Delta Population: %v\n", deltaPopulation)
 
-	graph := asciigraph.Plot(b.stats.population, asciigraph.Height(5), asciigraph.Width(200))
+	graph := asciigraph.Plot(b.stats.population, asciigraph.Height(5), asciigraph.Width(WIDTH))
 	fmt.Print(graph)
 
 }

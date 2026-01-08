@@ -13,13 +13,13 @@ func (c *Cell) String() string {
 	representation := ""
 
 	if c.status {
-		representation = ALIVE_STRING
+		representation = ColorString(ALIVE_STRING, Colors.MAGENTA)
 	} else {
-		representation = DEAD_STRING
+		representation = ColorString(DEAD_STRING, Colors.GREY)
 	}
 
 	if c.selected {
-		representation = fmt.Sprintf("[%s]", representation)
+		representation = representation + ColorString("<", Colors.RED)
 	} else {
 		representation = fmt.Sprintf("%s", representation)
 	}

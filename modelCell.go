@@ -9,19 +9,16 @@ func (c *Cell) String() string {
 	representation := ""
 
 	if c.status {
-		representation = ALIVE_STRING
+		representation = ColoredString(ALIVE_STRING, Colors.FG_MAGENTA) //ALIVE_STRING
 	} else {
-		representation = DEAD_STRING
+		representation = ColoredString(DEAD_STRING, Colors.FG_GREY) //DEAD_STRING
 	}
 
 	if c.selected {
-		return ApplyStyle(
-			ColoredString(representation, Colors.BRIGHT_CYAN),
-			TextStyle.UNDERLINE,
-		)
-	} else {
-		return ColoredString(representation, Colors.MAGENTA)
+		return ColoredString(representation, Colors.BG_GREY)
 	}
+
+	return representation
 
 }
 

@@ -18,6 +18,7 @@ type Board struct {
 }
 
 type Stats struct {
+	generation       int
 	population       []float64
 	populationChange []float64
 }
@@ -29,6 +30,7 @@ func NewBoard(width, height int) *Board {
 		height: height,
 		width:  width,
 		stats: Stats{
+			generation:       0,
 			population:       []float64{},
 			populationChange: []float64{},
 		},
@@ -83,6 +85,8 @@ func (b *Board) Evolve() (end bool) {
 
 	b.PolliceVerso()
 	b.PrintBoard()
+
+	b.stats.generation += 1
 
 	end = b.CollectPopulationStat()
 	b.PrintStats()
@@ -191,18 +195,14 @@ func (b *Board) CollectPopulationStat() (end bool) {
 
 func (b *Board) PrintStats() {
 
+	fmt.Printf("\t* # Generations: %v\n", b.stats.generation)
 	currentPopulation := b.stats.population[len(b.stats.population)-1]
 	fmt.Printf("\t* Current Population: %v\n", currentPopulation)
+	deltaPopulation := b.stats.populationChange[len(b.stats.populationChange)-1]
+	fmt.Printf("\t* Delta Population: %v\n", deltaPopulation)
 
-	graph := asciigraph.Plot(b.stats.population, asciigraph.Height(10), asciigraph.Width(100))
-	fmt.Println(graph)
-
-	if len(b.stats.populationChange) > 0 {
-		deltaPopulation := b.stats.populationChange[len(b.stats.populationChange)-1]
-		fmt.Printf("\t* Delta Population: %v\n", deltaPopulation)
-		graph := asciigraph.Plot(b.stats.populationChange, asciigraph.Height(10), asciigraph.Width(100))
-		fmt.Println(graph)
-	}
+	graph := asciigraph.Plot(b.stats.population, asciigraph.Height(5), asciigraph.Width(200))
+	fmt.Print(graph)
 
 }
 

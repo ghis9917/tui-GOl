@@ -13,6 +13,6 @@ const SPARSITY int = 5
 const MAX_INITIAL_POPULATION = (WIDTH * HEIGHT) / SPARSITY
 
 const ALIVE bool = true
-const ALIVE_STRING string = "@"
+const ALIVE_STRING string = "●"
 const DEAD bool = false
-const DEAD_STRING string = "-"
+const DEAD_STRING string = "○"

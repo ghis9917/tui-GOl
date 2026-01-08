@@ -5,6 +5,7 @@ import (
 	"math/rand"
 
 	"github.com/eiannone/keyboard"
+	"github.com/guptarohit/asciigraph"
 )
 
 type Board struct {
@@ -200,8 +201,8 @@ func (b *Board) PrintStats() {
 	deltaPopulation := b.stats.populationChange[len(b.stats.populationChange)-1]
 	fmt.Printf("\t* Delta Population: %v\n", deltaPopulation)
 
-	// graph := asciigraph.Plot(b.stats.population, asciigraph.Height(5), asciigraph.Width(WIDTH))
-	// fmt.Print(graph)
+	graph := asciigraph.Plot(b.stats.population, asciigraph.Height(5), asciigraph.Width(WIDTH))
+	fmt.Print(graph)
 
 }
 
@@ -213,7 +214,7 @@ func (b *Board) HandleKeyStrokes(keysEvents <-chan keyboard.KeyEvent) {
 	if event.Err != nil {
 		panic(event.Err)
 	}
-	fmt.Printf("You pressed: rune %q, key %X\r\n", event.Rune, event.Key)
+	// fmt.Printf("You pressed: rune %q, key %X\r\n", event.Rune, event.Key)
 
 	if !b.started { // Handle selection event only if simulation hasn't started yet
 		if event.Rune == 's' {
@@ -253,18 +254,17 @@ func (b *Board) HandleKeyStrokes(keysEvents <-chan keyboard.KeyEvent) {
 		}
 	}
 
-	if event.Key == keyboard.KeyEsc || event.Key == keyboard.KeyCtrlC {
-		b.started = true
-		b.CleanSelection()
-		return
-	}
-
 	switch event.Key {
+	case keyboard.KeySpace:
+		b.SwitchCellStatus()
+	case keyboard.KeyEsc:
+		fallthrough
+	case keyboard.KeyCtrlC:
+		fallthrough
 	case keyboard.KeyEnter:
 		b.started = true
 		b.CleanSelection()
-	case keyboard.KeySpace:
-		b.SwitchCellStatus()
+		fallthrough
 	default:
 		return
 	}

@@ -3,7 +3,6 @@ package main
 import (
 	"time"
 
-	tm "github.com/buger/goterm"
 	"github.com/eiannone/keyboard"
 )
 
@@ -14,11 +13,9 @@ func main() {
 		HEIGHT,
 	)
 
-	tm.Clear()
-
 	for {
 
-		tm.MoveCursor(1, 1)
+		ClearScreen()
 
 		if board.started {
 			if board.Evolve() {
@@ -32,8 +29,6 @@ func main() {
 			}
 			board.HandleKeyStrokes(keysEvents)
 		}
-
-		tm.Flush()
 
 		if board.started {
 			time.Sleep(SIMULATION_FRAME_RATE)

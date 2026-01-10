@@ -11,6 +11,7 @@ type Symbols struct {
 	SQUARE           Symbol
 	SQUARE_EMOJI     Symbol
 	SQUARE_BIG_EMOJI Symbol
+	MOON             Symbol
 }
 
 var AvailableSymbols = Symbols{
@@ -33,5 +34,9 @@ var AvailableSymbols = Symbols{
 	SQUARE_BIG_EMOJI: Symbol{
 		Filled: "⬜️",
 		Empty:  "⬛️",
+	},
+	MOON: Symbol{
+		Filled: "🌕",
+		Empty:  "🌑",
 	},
 }

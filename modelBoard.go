@@ -5,7 +5,6 @@ import (
 	"math/rand"
 
 	"github.com/eiannone/keyboard"
-	"github.com/guptarohit/asciigraph"
 )
 
 type Board struct {
@@ -83,13 +82,14 @@ func (b *Board) CleanSelection() {
 
 func (b *Board) Evolve() (end bool) {
 
+	b.PrintStats() // Stats on top of the board
+
 	b.PolliceVerso()
 	b.PrintBoard()
 
 	b.stats.generation += 1
 
 	end = b.CollectPopulationStat()
-	b.PrintStats()
 
 	return end
 
@@ -195,14 +195,56 @@ func (b *Board) CollectPopulationStat() (end bool) {
 
 func (b *Board) PrintStats() {
 
-	fmt.Printf("\t* # Generations: %v\n", b.stats.generation)
-	currentPopulation := b.stats.population[len(b.stats.population)-1]
-	fmt.Printf("\t* Current Population: %v\n", currentPopulation)
-	deltaPopulation := b.stats.populationChange[len(b.stats.populationChange)-1]
-	fmt.Printf("\t* Delta Population: %v\n", deltaPopulation)
+	fmt.Println(
+		ColoredString(
+			ApplyStyle(
+				"Stats",
+				TextStyle.BOLD,
+				TextStyle.REVERSE,
+			),
+			Colors.FG_BRIGHT_MAGENTA,
+		),
+	)
 
-	graph := asciigraph.Plot(b.stats.population, asciigraph.Height(5), asciigraph.Width(WIDTH))
-	fmt.Print(graph)
+	fmt.Println(
+		ApplyStyle("* # Generations: ", TextStyle.BOLD),
+		ColoredString(
+			ApplyStyle(
+				fmt.Sprintf("%v", b.stats.generation),
+				TextStyle.BOLD,
+				TextStyle.UNDERLINE,
+			),
+			Colors.FG_BRIGHT_MAGENTA,
+		),
+	)
+
+	fmt.Println(
+		ApplyStyle("* Current Population: ", TextStyle.BOLD),
+		ColoredString(
+			ApplyStyle(
+				fmt.Sprintf("%v", b.stats.population[len(b.stats.population)-1]),
+				TextStyle.BOLD,
+				TextStyle.UNDERLINE,
+			),
+			Colors.FG_BRIGHT_MAGENTA,
+		),
+	)
+
+	if len(b.stats.populationChange) > 0 {
+		fmt.Println(
+			ApplyStyle("* Delta Population: ", TextStyle.BOLD),
+			ColoredString(
+				ApplyStyle(
+					fmt.Sprintf("%v", b.stats.populationChange[len(b.stats.populationChange)-1]),
+					TextStyle.BOLD,
+					TextStyle.UNDERLINE,
+				),
+				Colors.FG_BRIGHT_MAGENTA,
+			),
+		)
+	}
+
+	fmt.Println()
 
 }
 
@@ -234,6 +276,12 @@ func (b *Board) HandleKeyStrokes(keysEvents <-chan keyboard.KeyEvent) {
 
 		if event.Rune == 'a' {
 			b.Move(&b.selectedCell.j, -1, b.width)
+			return
+		}
+
+		if event.Rune != 'a' && event.Rune != 'w' && event.Rune != 's' && event.Rune != 'd' && event.Rune != '\x00' { // All other letters
+			b.started = true
+			b.CleanSelection()
 			return
 		}
 

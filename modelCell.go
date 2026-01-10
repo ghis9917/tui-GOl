@@ -15,7 +15,7 @@ func (c *Cell) String() string {
 	}
 
 	if c.selected {
-		return ColoredString(representation, Colors.BG_BRIGHT_CYAN) //Change accto keep contrast with emoji/unicode color
+		return ColoredString(representation, Colors.BG_RED) //Change accto keep contrast with emoji/unicode color
 	}
 
 	return representation

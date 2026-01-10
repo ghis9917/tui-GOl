@@ -218,38 +218,22 @@ func (b *Board) HandleKeyStrokes(keysEvents <-chan keyboard.KeyEvent) {
 
 	if !b.started { // Handle selection event only if simulation hasn't started yet
 		if event.Rune == 's' {
-			if b.selectedCell.i+1 < len(b.cells) {
-				b.SwitchCellSelection()
-				b.selectedCell.i += 1
-				b.SwitchCellSelection()
-			}
+			b.Move(&b.selectedCell.i, 1, b.height)
 			return
 		}
 
 		if event.Rune == 'w' {
-			if b.selectedCell.i-1 >= 0 {
-				b.SwitchCellSelection()
-				b.selectedCell.i -= 1
-				b.SwitchCellSelection()
-			}
+			b.Move(&b.selectedCell.i, -1, b.height)
 			return
 		}
 
 		if event.Rune == 'd' {
-			if b.selectedCell.j+1 < len(b.cells[0]) {
-				b.SwitchCellSelection()
-				b.selectedCell.j += 1
-				b.SwitchCellSelection()
-			}
+			b.Move(&b.selectedCell.j, 1, b.width)
 			return
 		}
 
 		if event.Rune == 'a' {
-			if b.selectedCell.j-1 >= 0 {
-				b.SwitchCellSelection()
-				b.selectedCell.j -= 1
-				b.SwitchCellSelection()
-			}
+			b.Move(&b.selectedCell.j, -1, b.width)
 			return
 		}
 	}
@@ -267,6 +251,16 @@ func (b *Board) HandleKeyStrokes(keysEvents <-chan keyboard.KeyEvent) {
 		fallthrough
 	default:
 		return
+	}
+
+}
+
+func (b *Board) Move(axys *int, direction, upperLimit int) {
+
+	if *axys+direction >= 0 && *axys+direction < upperLimit {
+		b.SwitchCellSelection()
+		*axys += direction
+		b.SwitchCellSelection()
 	}
 
 }

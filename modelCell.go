@@ -9,13 +9,13 @@ func (c *Cell) String() string {
 	representation := ""
 
 	if c.status {
-		representation = ColoredString(ALIVE_STRING, Colors.FG_MAGENTA) //ALIVE_STRING
+		representation = ColoredString(ALIVE_STRING, Colors.FG_MAGENTA) //Applied only to unicode symbols
 	} else {
-		representation = ColoredString(DEAD_STRING, Colors.FG_GREY) //DEAD_STRING
+		representation = ColoredString(DEAD_STRING, Colors.FG_GREY) //Applied only to unicode symbols
 	}
 
 	if c.selected {
-		return ColoredString(representation, Colors.BG_GREY)
+		return ColoredString(representation, Colors.BG_BRIGHT_CYAN) //Change accto keep contrast with emoji/unicode color
 	}
 
 	return representation

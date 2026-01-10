@@ -236,21 +236,22 @@ func (b *Board) HandleKeyStrokes(keysEvents <-chan keyboard.KeyEvent) {
 			b.Move(&b.selectedCell.j, -1, b.width)
 			return
 		}
-	}
 
-	switch event.Key {
-	case keyboard.KeySpace:
-		b.SwitchCellStatus()
-	case keyboard.KeyEsc:
-		fallthrough
-	case keyboard.KeyCtrlC:
-		fallthrough
-	case keyboard.KeyEnter:
-		b.started = true
-		b.CleanSelection()
-		fallthrough
-	default:
-		return
+		switch event.Key {
+		case keyboard.KeySpace:
+			b.SwitchCellStatus()
+		case keyboard.KeyEsc:
+			fallthrough
+		case keyboard.KeyCtrlC:
+			fallthrough
+		case keyboard.KeyEnter:
+			b.started = true
+			b.CleanSelection()
+			fallthrough
+		default:
+			return
+		}
+
 	}
 
 }

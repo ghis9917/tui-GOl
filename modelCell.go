@@ -8,14 +8,17 @@ type Cell struct {
 func (c *Cell) String() string {
 	representation := ""
 
-	if c.status {
-		representation = ColoredString(ALIVE_STRING, Colors.FG_MAGENTA) //Applied only to unicode symbols
+	var bg Color
+	if c.selected {
+		bg = THEME.Selection //Change to keep contrast with emoji/unicode color
 	} else {
-		representation = ColoredString(DEAD_STRING, Colors.FG_GREY) //Applied only to unicode symbols
+		bg = THEME.Background
 	}
 
-	if c.selected {
-		return ColoredString(representation, Colors.BG_RED) //Change accto keep contrast with emoji/unicode color
+	if c.status {
+		representation = ColoredString(ALIVE_STRING, THEME.Primary, bg) //Applied only to unicode symbols
+	} else {
+		representation = ColoredString(DEAD_STRING, THEME.Secondary, bg) //Applied only to unicode symbols
 	}
 
 	return representation

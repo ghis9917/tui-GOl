@@ -1,27 +1,31 @@
 package main
 
-type Color struct {
-	RESET string
+type Color string
+
+type AvailableColor struct {
+	NIL   Color
+	RESET Color
 	// FOREGROUND COLORS
-	FG_GREY           string
-	FG_MAGENTA        string
-	FG_RED            string
-	FG_CYAN           string
-	FG_BRIGHT_RED     string
-	FG_BRIGHT_YELLOW  string
-	FG_BRIGHT_CYAN    string
-	FG_BRIGHT_MAGENTA string
+	FG_GREY           Color
+	FG_MAGENTA        Color
+	FG_RED            Color
+	FG_CYAN           Color
+	FG_BRIGHT_RED     Color
+	FG_BRIGHT_YELLOW  Color
+	FG_BRIGHT_CYAN    Color
+	FG_BRIGHT_MAGENTA Color
 
 	//BACKGROUND COLORS
-	BG_GREY        string
-	BG_RED         string
-	BG_WHITE       string
-	BG_CYAN        string
-	BG_BRIGHT_CYAN string
-	BG_BRIGHT_RED  string
+	BG_GREY        Color
+	BG_RED         Color
+	BG_WHITE       Color
+	BG_CYAN        Color
+	BG_BRIGHT_CYAN Color
+	BG_BRIGHT_RED  Color
 }
 
-var Colors = Color{
+var Colors = AvailableColor{
+	NIL:               "",
 	RESET:             "\033[0m",
 	FG_RED:            "\033[31m",
 	FG_MAGENTA:        "\033[35m",

@@ -22,7 +22,7 @@ type Stats struct {
 	populationChange []float64
 }
 
-func NewBoard(width, height, sparsity int) *Board {
+func NewBoard(width, height int, fill float64) (board *Board) {
 
 	b := &Board{
 		cells:  make([][]Cell, height),
@@ -36,12 +36,12 @@ func NewBoard(width, height, sparsity int) *Board {
 		started:      false,
 		selectedCell: Coordinate{i: 0, j: 0},
 	}
-	limit := MAX_POPULATION / sparsity
+	limit := int(float64(width*height) * fill)
 
 	for i := range b.cells {
 		b.cells[i] = make([]Cell, width)
 		for j := range b.cells[i] {
-			if rand.Intn(SPARSITY) == 1 && limit > 0 {
+			if rand.Intn(int(1.0/fill)) == 0 && limit > 0 {
 				b.cells[i][j] = Cell{status: ALIVE, selected: Coordinate{i: i, j: j} == b.selectedCell}
 				limit -= 1
 			} else {
@@ -83,6 +83,7 @@ func (b *Board) CleanSelection() {
 func (b *Board) Evolve() (end bool) {
 
 	b.PrintStats() // Stats on top of the board
+	// TODO: Add a print for the setup of the board letting the user know the parameters set for the current simulation
 
 	b.PolliceVerso()
 	b.PrintBoard()
@@ -132,7 +133,7 @@ func (b *Board) GetCell(i, j int) (status, valid bool) {
 
 }
 
-func CountLiveNeighbours(i, j int, b *Board) int {
+func CountLiveNeighbours(i, j int, b *Board) (neighboursNumber int) {
 
 	count := 0
 
@@ -187,6 +188,13 @@ func (b *Board) CollectPopulationStat() (end bool) {
 	if len(b.stats.population) > 1 {
 		populationChange := float64(population) - b.stats.population[len(b.stats.population)-2]
 		b.stats.populationChange = append(b.stats.populationChange, populationChange)
+		if len(b.stats.populationChange) > 3 {
+			static := true
+			for _, pc := range b.stats.populationChange[len(b.stats.populationChange)-3:] {
+				static = pc == 0 && static
+			}
+			return static
+		}
 	}
 
 	return population == 0
@@ -202,7 +210,8 @@ func (b *Board) PrintStats() {
 				TextStyle.BOLD,
 				TextStyle.REVERSE,
 			),
-			Colors.FG_BRIGHT_MAGENTA,
+			THEME.Secondary,
+			THEME.Background,
 		),
 	)
 
@@ -214,7 +223,8 @@ func (b *Board) PrintStats() {
 				TextStyle.BOLD,
 				TextStyle.UNDERLINE,
 			),
-			Colors.FG_BRIGHT_MAGENTA,
+			THEME.Secondary,
+			THEME.Background,
 		),
 	)
 
@@ -226,7 +236,8 @@ func (b *Board) PrintStats() {
 				TextStyle.BOLD,
 				TextStyle.UNDERLINE,
 			),
-			Colors.FG_BRIGHT_MAGENTA,
+			THEME.Secondary,
+			THEME.Background,
 		),
 	)
 
@@ -239,7 +250,8 @@ func (b *Board) PrintStats() {
 					TextStyle.BOLD,
 					TextStyle.UNDERLINE,
 				),
-				Colors.FG_BRIGHT_MAGENTA,
+				THEME.Secondary,
+				THEME.Background,
 			),
 		)
 	}
@@ -312,4 +324,64 @@ func (b *Board) Move(axys *int, direction, upperLimit int) {
 		b.SwitchCellSelection()
 	}
 
+}
+
+func (b *Board) PrintSummary() {
+
+	fmt.Println(
+		ColoredString(
+			ApplyStyle(
+				"Stats",
+				TextStyle.BOLD,
+				TextStyle.REVERSE,
+			),
+			THEME.Secondary,
+			THEME.Background,
+		),
+	)
+
+	fmt.Println(
+		ApplyStyle("* # Generations: ", TextStyle.BOLD),
+		ColoredString(
+			ApplyStyle(
+				fmt.Sprintf("%v", b.stats.generation),
+				TextStyle.BOLD,
+				TextStyle.UNDERLINE,
+			),
+			THEME.Secondary,
+			THEME.Background,
+		),
+	)
+
+	fmt.Println(
+		ApplyStyle("* Initial Population -> Final Population: ", TextStyle.BOLD),
+		ColoredString(
+			ApplyStyle(
+				fmt.Sprintf("%v -> %v", b.stats.population[0], b.stats.population[len(b.stats.population)-1]),
+				TextStyle.BOLD,
+				TextStyle.UNDERLINE,
+			),
+			THEME.Secondary,
+			THEME.Background,
+		),
+	)
+
+	if len(b.stats.populationChange) > 0 {
+		fmt.Println(
+			ApplyStyle("* Final Delta Population: ", TextStyle.BOLD),
+			ColoredString(
+				ApplyStyle(
+					fmt.Sprintf("%v", b.stats.population[len(b.stats.population)-1]-b.stats.population[0]),
+					TextStyle.BOLD,
+					TextStyle.UNDERLINE,
+				),
+				THEME.Secondary,
+				THEME.Background,
+			),
+		)
+	}
+
+	fmt.Println()
+
+	b.PrintBoard()
 }

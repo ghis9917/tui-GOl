@@ -22,7 +22,7 @@ type Stats struct {
 	populationChange []float64
 }
 
-func NewBoard(width, height int) *Board {
+func NewBoard(width, height, sparsity int) *Board {
 
 	b := &Board{
 		cells:  make([][]Cell, height),
@@ -36,7 +36,7 @@ func NewBoard(width, height int) *Board {
 		started:      false,
 		selectedCell: Coordinate{i: 0, j: 0},
 	}
-	limit := MAX_INITIAL_POPULATION
+	limit := MAX_POPULATION / sparsity
 
 	for i := range b.cells {
 		b.cells[i] = make([]Cell, width)

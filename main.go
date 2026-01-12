@@ -3,26 +3,33 @@ package main
 import (
 	"fmt"
 	"time"
+	"flag"
+	"log"
 
 	"github.com/eiannone/keyboard"
 )
 
 func main() {
 
+	width := flag.Int("width", WIDTH, "Override the default width of the board")
+	height := flag.Int("height", HEIGHT, "Override the default height of the board")
+	sparsity := flag.Int("sparsity", SPARSITY, "How filled should the randomly generated matrix be?")
+	fps := flag.Int("fps", FPS, "Simulation frame rate (during set up the frame rate is set to a smooth 60fps)")
+	flag.Parse()
+
+	simulationRefreshRate := time.Second / time.Duration(*fps)
+
 	// TODO: Set up initialization of simulation through args such as:
-	// TODO:     * size of the simulation board (width, height)
-	// TODO:     * sparsity of the random initialization of cells (how many can randomly be initialized as alive?)
-	// TODO:     * FPS
 	// TODO:     * Representation of cells (alive and dead symbols)
 	// TODO:     * Text colors
-
-	// TODO: Write function to print 'help' cmd with all available options
+	// TODO:     * Max Generations
 
 	// TODO: Create theme struct to simplify editing of color
 
 	board := NewBoard(
-		WIDTH,
-		HEIGHT,
+		*width,
+		*height,
+		*sparsity,
 	)
 
 	for {
@@ -39,15 +46,15 @@ func main() {
 			board.PrintBoard()
 			keysEvents, err := keyboard.GetKeys(10)
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
 			board.HandleKeyStrokes(keysEvents)
 		}
 
 		if board.started {
-			time.Sleep(SIMULATION_FRAME_RATE)
+			time.Sleep(simulationRefreshRate)
 		} else {
-			time.Sleep(UI_FRAME_RATE)
+			time.Sleep(UI_REFRESH_RATE)
 		}
 	}
 

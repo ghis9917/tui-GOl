@@ -6,7 +6,7 @@ type Symbol struct {
 }
 
 type Symbols struct {
-	LETTERS    		 Symbol
+	LETTERS          Symbol
 	CIRCLE           Symbol
 	CIRCLE_EMOJI     Symbol
 	SQUARE           Symbol
@@ -18,7 +18,7 @@ type Symbols struct {
 var AvailableSymbols = Symbols{
 	LETTERS: Symbol{
 		Filled: "@",
-		Empty:  "+",
+		Empty:  "-",
 	},
 	CIRCLE: Symbol{
 		Filled: "●",

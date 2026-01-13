@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"time"
 
@@ -23,29 +22,26 @@ func main() {
 		log.Fatal("-fill value should be contained inside the [0, 1] interval")
 	}
 
-	// TODO: Set up initialization of simulation through args such as:
-	// TODO:     * Representation of cells (alive and dead symbols)
-	// TODO:     * Text colors
-
-	// TODO: Create theme struct to simplify editing of color
-
 	board := NewBoard(
-		*width,
-		*height,
-		*fill,
+		Config{
+			width:  *width,
+			height: *height,
+			fill:   *fill,
+			fps:    *fps,
+		},
 	)
 
 	for {
 
 		ClearScreen()
-		fmt.Print(ColoredString(BANNER, THEME.Primary, THEME.Background))
+		board.PrintBanner(BANNER)
 
 		if board.started {
 			if board.Evolve() {
 				break
 			}
 		} else {
-			PrintSetUpInstructions()
+			board.PrintSetUpInstructions()
 			board.PrintBoard()
 			keysEvents, err := keyboard.GetKeys(10)
 			if err != nil {
@@ -62,7 +58,7 @@ func main() {
 	}
 
 	ClearScreen()
-	fmt.Print(ColoredString(END_BANNER, THEME.Primary, THEME.Background))
+	board.PrintBanner(END_BANNER)
 	board.PrintSummary()
 
 }

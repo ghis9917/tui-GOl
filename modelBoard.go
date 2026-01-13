@@ -14,6 +14,7 @@ type Board struct {
 	stats        Stats
 	started      bool
 	selectedCell Coordinate
+	cfg          Config
 }
 
 type Stats struct {
@@ -22,26 +23,27 @@ type Stats struct {
 	populationChange []float64
 }
 
-func NewBoard(width, height int, fill float64) (board *Board) {
+func NewBoard(cfg Config) (board *Board) {
 
 	b := &Board{
-		cells:  make([][]Cell, height),
-		height: height,
-		width:  width,
+		cells:        make([][]Cell, cfg.height),
+		height:       cfg.height,
+		width:        cfg.width,
+		started:      false,
+		selectedCell: Coordinate{i: 0, j: 0},
+		cfg:          cfg,
 		stats: Stats{
 			generation:       0,
 			population:       []float64{},
 			populationChange: []float64{},
 		},
-		started:      false,
-		selectedCell: Coordinate{i: 0, j: 0},
 	}
-	limit := int(float64(width*height) * fill)
+	limit := int(float64(cfg.width*cfg.height) * cfg.fill)
 
 	for i := range b.cells {
-		b.cells[i] = make([]Cell, width)
+		b.cells[i] = make([]Cell, cfg.width)
 		for j := range b.cells[i] {
-			if rand.Intn(int(1.0/fill)) == 0 && limit > 0 {
+			if rand.Intn(int(1.0/cfg.fill)) == 0 && limit > 0 {
 				b.cells[i][j] = Cell{status: ALIVE, selected: Coordinate{i: i, j: j} == b.selectedCell}
 				limit -= 1
 			} else {
@@ -158,16 +160,13 @@ func CountLiveNeighbours(i, j int, b *Board) (neighboursNumber int) {
 
 func (b *Board) PrintBoard() {
 
-	representation := ""
-
 	for i := range b.cells {
+		representation := ""
 		for j := range b.cells[i] {
 			representation += b.cells[i][j].String()
 		}
-		representation += "\n"
+		b.cfg.Println(representation)
 	}
-
-	fmt.Println(representation)
 
 }
 
@@ -203,7 +202,7 @@ func (b *Board) CollectPopulationStat() (end bool) {
 
 func (b *Board) PrintStats() {
 
-	fmt.Println(
+	b.cfg.Println(
 		ColoredString(
 			ApplyStyle(
 				"Stats",
@@ -215,7 +214,7 @@ func (b *Board) PrintStats() {
 		),
 	)
 
-	fmt.Println(
+	b.cfg.Println(
 		ApplyStyle("* # Generations: ", TextStyle.BOLD),
 		ColoredString(
 			ApplyStyle(
@@ -228,7 +227,7 @@ func (b *Board) PrintStats() {
 		),
 	)
 
-	fmt.Println(
+	b.cfg.Println(
 		ApplyStyle("* Current Population: ", TextStyle.BOLD),
 		ColoredString(
 			ApplyStyle(
@@ -242,7 +241,7 @@ func (b *Board) PrintStats() {
 	)
 
 	if len(b.stats.populationChange) > 0 {
-		fmt.Println(
+		b.cfg.Println(
 			ApplyStyle("* Delta Population: ", TextStyle.BOLD),
 			ColoredString(
 				ApplyStyle(
@@ -256,7 +255,7 @@ func (b *Board) PrintStats() {
 		)
 	}
 
-	fmt.Println()
+	b.cfg.Println()
 
 }
 
@@ -328,7 +327,7 @@ func (b *Board) Move(axys *int, direction, upperLimit int) {
 
 func (b *Board) PrintSummary() {
 
-	fmt.Println(
+	b.cfg.Println(
 		ColoredString(
 			ApplyStyle(
 				"Stats",
@@ -340,7 +339,7 @@ func (b *Board) PrintSummary() {
 		),
 	)
 
-	fmt.Println(
+	b.cfg.Println(
 		ApplyStyle("* # Generations: ", TextStyle.BOLD),
 		ColoredString(
 			ApplyStyle(
@@ -353,7 +352,7 @@ func (b *Board) PrintSummary() {
 		),
 	)
 
-	fmt.Println(
+	b.cfg.Println(
 		ApplyStyle("* Initial Population -> Final Population: ", TextStyle.BOLD),
 		ColoredString(
 			ApplyStyle(
@@ -367,7 +366,7 @@ func (b *Board) PrintSummary() {
 	)
 
 	if len(b.stats.populationChange) > 0 {
-		fmt.Println(
+		b.cfg.Println(
 			ApplyStyle("* Final Delta Population: ", TextStyle.BOLD),
 			ColoredString(
 				ApplyStyle(
@@ -381,7 +380,26 @@ func (b *Board) PrintSummary() {
 		)
 	}
 
-	fmt.Println()
+	b.cfg.Println()
 
 	b.PrintBoard()
+}
+
+func (b *Board) PrintSetUpInstructions() {
+	b.cfg.Println(ColoredString(ApplyStyle("Simulation Set Up", TextStyle.BOLD, TextStyle.REVERSE), THEME.Secondary, THEME.Background))
+	b.cfg.Println("Commands:")
+
+	b.cfg.Println("    - ", ColoredString(ApplyStyle("'a'", TextStyle.BOLD, TextStyle.UNDERLINE), THEME.Secondary, THEME.Background), ": move to the cell to the left;")
+	b.cfg.Println("    - ", ColoredString(ApplyStyle("'w'", TextStyle.BOLD, TextStyle.UNDERLINE), THEME.Secondary, THEME.Background), ": move to the cell above;")
+	b.cfg.Println("    - ", ColoredString(ApplyStyle("'s'", TextStyle.BOLD, TextStyle.UNDERLINE), THEME.Secondary, THEME.Background), ": move to the cell below;")
+	b.cfg.Println("    - ", ColoredString(ApplyStyle("'d'", TextStyle.BOLD, TextStyle.UNDERLINE), THEME.Secondary, THEME.Background), ": move to the cell to the right;")
+	b.cfg.Println("    - ", ColoredString(ApplyStyle("space bar", TextStyle.BOLD, TextStyle.UNDERLINE), THEME.Secondary, THEME.Background), ": toggle cell status (alive/dead);")
+	b.cfg.Println("    - ", ColoredString(ApplyStyle("any other key", TextStyle.BOLD, TextStyle.UNDERLINE), THEME.Secondary, THEME.Background), ": start simulation;")
+	b.cfg.Println()
+}
+
+func (b *Board) PrintBanner(banner []string) {
+	for _, line := range banner {
+		b.cfg.Println(line)
+	}
 }

@@ -3,11 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
+	"strings"
 
-	"github.com/hymkor/go-cursorposition"
 	tsize "github.com/kopoli/go-terminal-size"
-	"golang.org/x/term"
+	"github.com/leaanthony/go-ansi-parser"
 )
 
 type Config struct {
@@ -21,28 +20,19 @@ func (cfg *Config) Println(strs ...string) {
 	for _, s := range strs {
 		fmt.Print(ColoredString(s, THEME.Primary, THEME.Background))
 	}
+
 	s, err := tsize.GetSize()
 	if err != nil {
 		log.Fatal(err)
 	}
-	// _ := stripansi.String(strings.Join(strs, ""))
 
-	// Switch terminal to raw-mode.
-	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// Query and display the cursor position with ESC[6n
-	_, col, err := cursorposition.Request(os.Stderr)
+	count, err := ansi.Length(strings.Join(strs, ""))
 	if err != nil {
 		log.Fatal(err)
-	} else {
-		term.Restore(int(os.Stdin.Fd()), oldState)
 	}
 
-	for range s.Width - col + 1 {
+	for range s.Width - count {
 		fmt.Print(ColoredString(" ", THEME.Primary, THEME.Background))
 	}
-	fmt.Printf("\n\r")
+	fmt.Println()
 }

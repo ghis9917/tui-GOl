@@ -1,7 +1,7 @@
 # TUI Game Of Life
 
 The Game of Life, also known simply as *Life*, is a cellular automaton. Based on simple rules, cells can live, die, or revive their neighbors.
-![simulation](https://github.com/ghis9917/tui-GOl/resources/SampleVideo.mp4)
+![simulation](https://github.com/ghis9917/tui-GOl/blob/main/resources/SampleVideo.mp4)
 
 ## Rules
 

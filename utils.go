@@ -24,3 +24,13 @@ func ColoredString(s string, foreground, background Color) string {
 func ApplyStyle(s string, styles ...string) string {
 	return strings.Join(styles, "") + s + "\033[0m"
 }
+
+func countRune(s string, r rune) int {
+	count := 0
+	for _, c := range s {
+		if c == r {
+			count++
+		}
+	}
+	return count
+}

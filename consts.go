@@ -20,7 +20,7 @@ var END_BANNER = []string{
 	"╚═▀▀▀══╝    ╚═╝       ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝        ╚═╝",
 }
 
-const FPS = 24
+const FPS = 30
 const UI_REFRESH_RATE = time.Second / 60
 
 const WIDTH int = 75
@@ -35,4 +35,4 @@ var CELL_REPRESENTATION = AvailableSymbols.EMPTY
 var ALIVE_STRING string = CELL_REPRESENTATION.Filled
 var DEAD_STRING string = CELL_REPRESENTATION.Empty
 
-var THEME Theme = Themes.LIGHT_HIGH_CONTRAST
+var THEME Theme = Themes.DARK_RED_BLUE

@@ -84,8 +84,7 @@ func (b *Board) CleanSelection() {
 
 func (b *Board) Evolve() (end bool) {
 
-	b.PrintStats() // Stats on top of the board
-	// TODO: Add a print for the setup of the board letting the user know the parameters set for the current simulation
+	b.PrintStats()
 
 	b.PolliceVerso()
 	b.PrintBoard()
@@ -167,6 +166,8 @@ func (b *Board) PrintBoard() {
 		}
 		b.cfg.Println(representation)
 	}
+
+	b.cfg.FillVerticalSpace()
 
 }
 
@@ -386,6 +387,7 @@ func (b *Board) PrintSummary() {
 }
 
 func (b *Board) PrintSetUpInstructions() {
+
 	b.cfg.Println(ColoredString(ApplyStyle("Simulation Set Up", TextStyle.BOLD, TextStyle.REVERSE), THEME.Secondary, THEME.Background))
 	b.cfg.Println("Commands:")
 
@@ -399,7 +401,12 @@ func (b *Board) PrintSetUpInstructions() {
 }
 
 func (b *Board) PrintBanner(banner []string) {
+	b.cfg.Println()
+
 	for _, line := range banner {
 		b.cfg.Println(line)
 	}
+
+	b.cfg.Println()
+	b.cfg.PrintConfig()
 }

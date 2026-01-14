@@ -16,8 +16,6 @@ func main() {
 	fps := flag.Int("fps", FPS, "Simulation frame rate (during set up the frame rate is set to a smooth 60fps)")
 	flag.Parse()
 
-	simulationRefreshRate := time.Second / time.Duration(*fps)
-
 	if *fill < 0 || *fill > 1 {
 		log.Fatal("-fill value should be contained inside the [0, 1] interval")
 	}
@@ -55,7 +53,7 @@ func main() {
 		}
 
 		if board.started {
-			time.Sleep(simulationRefreshRate)
+			time.Sleep(time.Second / time.Duration(board.cfg.fps))
 		} else {
 			time.Sleep(UI_REFRESH_RATE)
 		}

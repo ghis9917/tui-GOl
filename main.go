@@ -8,6 +8,9 @@ import (
 	"github.com/eiannone/keyboard"
 )
 
+// TODO: General refactoring needed
+// TODO: Clarify especially the structure for the printing of different sections
+
 func main() {
 
 	width := flag.Int("width", WIDTH, "Override the default width of the board")

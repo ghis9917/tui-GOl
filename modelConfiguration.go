@@ -14,11 +14,20 @@ type Config struct {
 	height int
 	fps    int
 	fill   float64
+	output string
+}
+
+func (cfg *Config) Draw() {
+	fmt.Print(cfg.output)
+}
+
+func (cfg *Config) ResetOutput() {
+	cfg.output = ""
 }
 
 func (cfg *Config) Println(strs ...string) {
 	for _, s := range strs {
-		fmt.Print(ColoredString(s, THEME.Primary, THEME.Background))
+		cfg.output += fmt.Sprint(ColoredString(s, THEME.Primary, THEME.Background))
 	}
 
 	s, err := tsize.GetSize()
@@ -32,7 +41,7 @@ func (cfg *Config) Println(strs ...string) {
 	}
 
 	for range s.Width - count {
-		fmt.Print(ColoredString(" ", THEME.Primary, THEME.Background))
+		cfg.output += fmt.Sprint(ColoredString(" ", THEME.Primary, THEME.Background))
 	}
-	fmt.Println()
+	cfg.output += fmt.Sprintln()
 }

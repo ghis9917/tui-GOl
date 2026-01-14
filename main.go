@@ -33,16 +33,20 @@ func main() {
 
 	for {
 
+		board.cfg.ResetOutput()
 		ClearScreen()
 		board.PrintBanner(BANNER)
 
 		if board.started {
 			if board.Evolve() {
+				board.cfg.Draw()
 				break
 			}
+			board.cfg.Draw()
 		} else {
 			board.PrintSetUpInstructions()
 			board.PrintBoard()
+			board.cfg.Draw()
 			keysEvents, err := keyboard.GetKeys(10)
 			if err != nil {
 				log.Fatal(err)

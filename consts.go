@@ -31,8 +31,8 @@ const FILL float64 = 0.25
 const ALIVE bool = true
 const DEAD bool = false
 
-var CELL_REPRESENTATION = AvailableSymbols.LETTERS
+var CELL_REPRESENTATION = AvailableSymbols.EMPTY
 var ALIVE_STRING string = CELL_REPRESENTATION.Filled
 var DEAD_STRING string = CELL_REPRESENTATION.Empty
 
-var THEME Theme = Themes.LIGHT
+var THEME Theme = Themes.LIGHT_HIGH_CONTRAST

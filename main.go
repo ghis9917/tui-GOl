@@ -34,7 +34,6 @@ func main() {
 	for {
 
 		board.cfg.ResetOutput()
-		ClearScreen()
 		board.PrintBanner(BANNER)
 
 		if board.started {
@@ -42,6 +41,7 @@ func main() {
 				board.cfg.Draw()
 				break
 			}
+			ClearScreen()
 			board.cfg.Draw()
 		} else {
 			board.PrintSetUpInstructions()
@@ -61,8 +61,9 @@ func main() {
 		}
 	}
 
-	ClearScreen()
+	board.cfg.ResetOutput()
 	board.PrintBanner(END_BANNER)
 	board.PrintSummary()
+	board.cfg.Draw()
 
 }

@@ -18,6 +18,7 @@ type Config struct {
 }
 
 func (cfg *Config) Draw() {
+	ClearScreen()
 	fmt.Print(cfg.output)
 }
 

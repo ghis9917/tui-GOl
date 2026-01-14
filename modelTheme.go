@@ -28,8 +28,8 @@ var Themes = AvailableTheme{
 	LIGHT_HIGH_CONTRAST: Theme{
 		Primary:    Colors.FG_RED,
 		Secondary:  Colors.FG_BLUE,
-		AliveCell:  Colors.BG_BLACK,
-		DeadCell:   Colors.BG_GREY,
+		AliveCell:  Colors.BG_RED,
+		DeadCell:   Colors.BG_BLUE,
 		Selection:  Colors.BG_DARK_GREY,
 		Background: Colors.BG_WHITE,
 	},

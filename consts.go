@@ -35,4 +35,4 @@ var CELL_REPRESENTATION = AvailableSymbols.EMPTY
 var ALIVE_STRING string = CELL_REPRESENTATION.Filled
 var DEAD_STRING string = CELL_REPRESENTATION.Empty
 
-var THEME Theme = Themes.DARK_RED_BLUE
+var THEME Theme = Themes.DARK

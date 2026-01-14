@@ -3,9 +3,6 @@ package main
 import (
 	"flag"
 	"log"
-	"time"
-
-	"github.com/eiannone/keyboard"
 )
 
 // TODO: General refactoring needed
@@ -23,7 +20,7 @@ func main() {
 		log.Fatal("-fill value should be contained inside the [0, 1] interval")
 	}
 
-	board := NewBoard(
+	game := NewGame(
 		Config{
 			width:  *width,
 			height: *height,
@@ -32,39 +29,7 @@ func main() {
 		},
 	)
 
-	for {
-
-		board.cfg.ResetOutput()
-		board.PrintBanner(BANNER)
-
-		if board.started {
-			if board.Evolve() {
-				board.cfg.Draw()
-				break
-			}
-			ClearScreen()
-			board.cfg.Draw()
-		} else {
-			board.PrintSetUpInstructions()
-			board.PrintBoard()
-			board.cfg.Draw()
-			keysEvents, err := keyboard.GetKeys(10)
-			if err != nil {
-				log.Fatal(err)
-			}
-			board.HandleKeyStrokes(keysEvents)
-		}
-
-		if board.started {
-			time.Sleep(time.Second / time.Duration(board.cfg.fps))
-		} else {
-			time.Sleep(UI_REFRESH_RATE)
-		}
-	}
-
-	board.cfg.ResetOutput()
-	board.PrintBanner(END_BANNER)
-	board.PrintSummary()
-	board.cfg.Draw()
+	game.SetUp()
+	game.Run()
 
 }
